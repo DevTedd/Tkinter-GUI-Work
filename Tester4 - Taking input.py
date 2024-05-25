@@ -1,6 +1,8 @@
 import tkinter#importing the library  
 from tkinter import ttk 
-import subprocess #
+from tkinter import filedialog
+import subprocess 
+import pandas as pd
 
 
 window = tkinter.Tk()
@@ -16,6 +18,49 @@ def enter_data():
     print('Best Month: ', best_month_combo.get())
     month = best_month_combo.get()
     print("Welcome to the Matrix... I know you are ",first," ",last,". You are ",age,"years old and born in ",month)
+
+
+def get_actuarial_file():
+    """Opens a file dialog for selecting the actuarial file and returns the path.
+
+    Returns:
+        str: The path of the selected actuarial file, or None if no file is selected.
+    """
+    filename = filedialog.askopenfilename(
+        title="Select Actuarial File",
+        filetypes=[("Excel files", "*.xlsx *.xlsm"), ("All files", "*.*")],
+    )
+    return filename
+
+
+def read_df(filepath, filetype):
+    """Reads a file into a DataFrame based on its filetype.
+
+    Args:
+        filepath (str): The path of the file to read.
+        filetype (str): The type of the file (e.g., "transactional", "actuarial").
+
+    Returns:
+        pandas.DataFrame: The DataFrame created from the file, or None if there's an error.
+    """
+
+    if not filepath:
+        return None  # Indicate no file selected
+
+    try:
+        if filetype == "transactional":
+            # Adjust delimiter as needed for your text file
+            df = pd.read_csv(filepath, delimiter="\t")
+        elif filetype == "actuarial":
+            df = pd.read_excel(filepath)
+        else:
+            print(f"Unsupported file type: {filetype}")
+            return None
+    except Exception as e:
+        print(f"Error reading file: {filepath} - {e}")
+        return None
+
+    return df
 
 
 window.title("LC Calculation General Busines?")
@@ -38,7 +83,7 @@ last_name_entry = tkinter.Entry(user_info_frame)
 last_name_entry.grid(row=1, column=1)
 
 
-# Next is the GUI title, first we create an instnace then add it to the grid
+# Next is the GUI title, first we create an instance then add it to the grid
 title_label = tkinter.Label(user_info_frame, text="LC Calculation General Business")
 title_combobox = ttk.Combobox(user_info_frame, values=["Fire","Motor","Eng", "Marine", "Misc", "Personal Accident", "General Business"])
 title_label.grid(row = 2, column=0)
