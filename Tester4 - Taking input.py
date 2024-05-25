@@ -20,6 +20,19 @@ def enter_data():
     print("Welcome to the Matrix... I know you are ",first," ",last,". You are ",age,"years old and born in ",month)
 
 
+def get_transactional_file():
+    """Opens a file dialog for selecting the transactional file and returns the path.
+
+    Returns:
+        str: The path of the selected transactional file, or None if no file is selected.
+    """
+    filename = filedialog.askopenfilename(
+        title="Select Transactional File",
+        filetypes=[("Text files", "*.txt"), ("All files", "*.*")],
+    )
+    return filename
+
+
 def get_actuarial_file():
     """Opens a file dialog for selecting the actuarial file and returns the path.
 
@@ -111,17 +124,23 @@ for child in user_info_frame.winfo_children():
 
 
 # Going into the second frame
-file_paths_frame = tkinter.LabelFrame(frame, text="Source and Destination FilePath Names")
+file_paths_frame = tkinter.LabelFrame(
+    frame, text="Source and Destination FilePath Names"
+)
 file_paths_frame.grid(row=1, column=0, sticky="news")
 
 # ACT Input file
 actInput_file_label = tkinter.Label(file_paths_frame, text="ACT Input File Path ->  ")
-actInput_file_check = tkinter.Checkbutton(file_paths_frame, text="Check to include ACT Input File")
+actInput_file_check = tkinter.Checkbutton(
+    file_paths_frame, text="Check to include ACT Input File"
+)
 actInput_file_label.grid(row=0, column=0)
 actInput_file_check.grid(row=1, column=0)
 
 # Lets add a random spinbox
-numberofFiles_label = tkinter.Label(file_paths_frame, text="Number of Files to be Processed ->  ")
+numberofFiles_label = tkinter.Label(
+    file_paths_frame, text="Number of Files to be Processed ->  "
+)
 numberofFiles_spinbox = tkinter.Spinbox(file_paths_frame, from_=1, to=4)
 numberofFiles_label.grid(row=2, column=0)
 numberofFiles_spinbox.grid(row=2, column=1)
@@ -132,9 +151,18 @@ outputs_spinbox = tkinter.Spinbox(file_paths_frame, from_=1, to=10)
 outputs_label.grid(row=3, column=0)
 outputs_spinbox.grid(row=3, column=1)
 
+# Button to open transactional file dialog
+transactional_file_button = tkinter.Button(
+    file_paths_frame, text="Select Transactional File", command=get_transactional_file
+)
+transactional_file_button.grid(row=4, column=0)
+
+# Button to open actuarial file dialog
+actuarial_file_button = tkinter.Button(file_paths_frame, text="Select Actuarial File", command=get_actuarial_file)
+actuarial_file_button.grid(row=4, column=1)
 
 for child in file_paths_frame.winfo_children():
-    child.grid_configure(padx=20, pady=20) 
+    child.grid_configure(padx=20, pady=20)
 
 
 # Downwards we are adding our 3rd label frame
